@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12/18 巴爾幹半島九國冬日之旅</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50; /* 深藍 - 代表歐洲/穩重 */
+            --accent-color: #c0392b; /* 深紅 - 用於警告/重點 */
+            --highlight-color: #f1c40f; /* 黃色 - 用於提示 */
+            --info-bg: #e8f6f3; /* 淺綠 - 用於天氣 */
+            --card-bg: #ffffff;
+            --bg-color: #f0f2f5;
+            --text-color: #333333;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        header .subtitle {
+            margin-top: 10px;
+            font-size: 1rem;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: -20px auto 40px; /* Pull up to overlap header */
+            padding: 0 15px;
+        }
+
+        /* 重點提醒卡片 */
+        .notice-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--highlight-color);
+        }
+
+        .notice-title {
+            color: #d35400;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .notice-item {
+            display: flex;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+
+        .notice-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+            min-width: 25px;
+        }
+
+        /* 行程卡片 */
+        .day-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .day-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .day-body {
+            padding: 20px;
+        }
+
+        .location-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .flag {
+            margin-right: 8px;
+            font-size: 1.4rem;
+        }
+
+        .weather-badge {
+            display: inline-block;
+            background-color: var(--info-bg);
+            color: #2980b9;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .info-block {
+            background-color: #fafafa;
+            border-left: 4px solid var(--accent-color);
+            padding: 12px 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-title {
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .info-text {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        /* 重點標示 */
+        .highlight-red {
+            color: #c0392b;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .btn-print {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: #fff;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>巴爾幹半島冬日之旅</h1>
+    <div class="subtitle">12/18 - 12/30 (13天)</div>
+</header>
+
+<div class="container">
+
+    <!-- 總體提醒 -->
+    <div class="notice-card">
+        <div class="notice-title">⚠️ 出發前核心備忘錄</div>
+        <div class="notice-item">
+            <span class="notice-icon">🧅</span>
+            <div><strong>洋蔥式穿搭：</strong>室內暖氣極強(20°C+)，戶外極冷(-5°C)。務必內層透氣、外層防風好穿脫。</div>
+        </div>
+        <div class="notice-item">
+            <span class="notice-icon">👢</span>
+            <div><strong>鞋子決勝負：</strong>斯洛維尼亞、羅馬尼亞易結冰積雪。請穿防滑、防水、保暖的靴子。</div>
+        </div>
+        <div class="notice-item">
+            <span class="notice-icon">💧</span>
+            <div><strong>飲水安全：</strong>除斯洛維尼亞/克羅埃西亞外，建議全程購買瓶裝水。</div>
+        </div>
+        <div class="notice-item">
+            <span class="notice-icon">💶</span>
+            <div><strong>零錢準備：</strong>歐洲公廁多需付費 (0.5~1歐元)，請預留硬幣。</div>
+        </div>
+    </div>
+
+    <!-- Day 1 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 1</span>
+            <span>12/18 (四)</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title"><span class="flag">🇹🇼</span> 台北 出發</div>
+            <div class="weather-badge">✈️ 機艙恆溫 (乾燥)</div>
+            <div class="info-block" style="border-left-color: #95a5a6;">
+                <span class="info-title" style="color: #7f8c8d;">💡 貼心提醒</span>
+                <div class="info-text">長途飛行請穿著寬鬆。過安檢後裝滿水瓶，機上隨時補水保濕。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 2</span>
+            <span>12/19 (五)</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title"><span class="flag">🇸🇮</span> 斯洛維尼亞 (布雷德)</div>
+            <div class="weather-badge">❄️ -3°C ~ 4°C (極冷/降雪)</div>
+            <div class="info-block">
+                <span class="info-title">🚫 文化禁忌</span>
+                <div class="info-text">
+                    1. 進入當地民宿或住家通常<strong>必須脫鞋</strong>。<br>
+                    2. 人民安靜內斂，公共場合請降低音量。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 3</span>
+            <span>12/20 (六)</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title"><span class="flag">🇭🇷</span> 克羅埃西亞 (札格雷布)</div>
+            <div class="weather-badge">☁️ -1°C ~ 5°C (寒冷)</div>
+            <div class="info-block">
+                <span class="info-title">🗣️ 聊天禁忌</span>
+                <div class="info-text">避免談論 1990 年代的南斯拉夫內戰。當地人自認是「中歐人」，以此為榮。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 4 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 4</span>
+            <span>12/21 (日)</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title"><span class="flag">🇭🇷</span> 十六湖國家公園</div>
+            <div class="weather-badge">❄️ -4°C ~ 3°C (易結冰)</div>
+            <div class="info-block" style="border-left-color: #e74c3c;">
+                <span class="info-title" style="color: #e74c3c;">⚠️ 安全第一</span>
+                <div class="info-text">冬季木棧道極為濕滑，<strong>嚴禁奔跑</strong>。拍照請先站定腳步，以免滑落湖中。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 5 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 5</span>
+            <span>12/22 (一)</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title"><span class="flag">🇧🇦</span> 波士尼亞 (莫斯塔爾)</div>
+            <div class="weather-badge">🌧️ 5°C ~ 12°C (多雨)</div>
+            <div class="info-block">
+                <span class="info-title">🕌 宗教與安全</span>
+                <div class="info-text">
+                    1. 參觀清真寺務必脫鞋，女性需備頭巾。<br>
+                    2. <strong>絕對禁止</strong>進入野外標示「地雷區」的荒地 (景點區已除雷安全)。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 6 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 6</span>
+            <span>12/23 (二)</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title"><span class="flag">🇲🇪</span> 蒙特內哥羅 (科托)</div>
+            <div class="weather-badge">🌧️ 4°C ~ 11°C (濕冷)</div>
+            <div class="info-block">
+                <span class="info-title">🐢 慢活哲學</span>
+                <div class="info-text">當地口頭禪 "Polako" (慢慢來)。餐廳上菜慢是常態，<strong>催促被視為極不禮貌</strong>。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 7 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 7</span>
+            <span>12/24 (三)</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title"><span class="flag">🇦🇱</span> 阿爾巴尼亞</div>
+            <div class="weather-badge">☁️ 0°C ~ 10°C (有霧)</div>
+            <div class="info-block" style="border-left-color: #8e44ad;">
+                <span class="info-title" style="color: #8e44ad;">🤯 肢體語言大反轉</span>
+                <div class="info-text">
+                    <strong class="highlight-red">搖頭 = Yes (是)</strong><br>
+                    <strong class="highlight-red">點頭 = No (不是)</strong><br>
+                    與台灣完全相反！建議用口語確認。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 8 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 8</span>
+            <span>12/25 (四)</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title"><span class="flag">🇲🇰</span> 北馬其頓</div>
+            <div class="weather-badge">🌫️ -2°C ~ 6°C (濃霧)</div>
+            <div class="info-block">
+                <span class="info-title">🚫 政治敏感</span>
+                <div class="info-text">國名爭議對希臘和當地人極為敏感，建議盡量避談政治話題。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 9 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 9</span>
+            <span>12/26 (五)</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title"><span class="flag">🇧🇬</span> 保加利亞 (索菲亞)</div>
+            <div class="weather-badge">❄️ -3°C ~ 4°C (寒冷)</div>
+            <div class="info-block">
+                <span class="info-title">💡 禮儀與購物</span>
+                <div class="info-text">
+                    1. 同樣是<strong>「搖頭Yes、點頭No」</strong>。<br>
+                    2. 盛產玫瑰油與保養品，是最佳伴手禮購買點。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 10 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 10</span>
+            <span>12/27 (六)</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title"><span class="flag">🇷🇴</span> 羅馬尼亞 (布加勒斯特)</div>
+            <div class="weather-badge">❄️ -4°C ~ 3°C (極冷)</div>
+            <div class="info-block" style="border-left-color: #d35400;">
+                <span class="info-title" style="color: #d35400;">⚠️ 防詐提醒</span>
+                <div class="info-text">計程車與路邊小販可能會有漫天喊價情況，務必先確認價格或使用正規車輛。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 11 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 11</span>
+            <span>12/28 (日)</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title"><span class="flag">🇷🇴</span> 羅馬尼亞 (吸血鬼城堡)</div>
+            <div class="weather-badge">☃️ -6°C ~ 1°C (全程最冷)</div>
+            <div class="info-block">
+                <span class="info-title">🧛 文化尊重</span>
+                <div class="info-text">
+                    1. 當地視德古拉原型(弗拉德三世)為民族英雄，不喜歡遊客過度妖魔化。<br>
+                    2. 山區體感極低，<strong>暖暖包請貼滿</strong>。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Day 12/13 -->
+    <div class="day-card">
+        <div class="day-header">
+            <span>Day 12/13</span>
+            <span>12/29 - 30</span>
+        </div>
+        <div class="day-body">
+            <div class="location-title">✈️ 返程 -> 溫暖的家</div>
+            <div class="info-block" style="border-left-color: #27ae60;">
+                <span class="info-title" style="color: #27ae60;">💰 離境提醒</span>
+                <div class="info-text">記得把剩餘的零錢在機場花掉，或預留給司機/領隊作為最後的小費。</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <p>祝旅途愉快 Safe Travels!</p>
+    <p style="opacity: 0.6; font-size: 0.7rem;">Weather based on historical averages.</p>
+</footer>
+
+</body>
+</html>
