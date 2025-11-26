@@ -1,437 +1,882 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>12/18 巴爾幹半島九國冬日之旅</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>巴爾幹半島17日冬遊互動指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Markdown Parser for AI responses -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #2c3e50; /* 深藍 - 代表歐洲/穩重 */
-            --accent-color: #c0392b; /* 深紅 - 用於警告/重點 */
-            --highlight-color: #f1c40f; /* 黃色 - 用於提示 */
-            --info-bg: #e8f6f3; /* 淺綠 - 用於天氣 */
-            --card-bg: #ffffff;
-            --bg-color: #f0f2f5;
-            --text-color: #333333;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.5;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #FDFBF7;
+            color: #2D3748;
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
         }
-
-        header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        .chart-container {
+            position: relative;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            height: 250px; /* Mobile height */
         }
-
-        header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 1px;
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px; /* Desktop height */
+                max-width: 600px;
+            }
         }
-
-        header .subtitle {
-            margin-top: 10px;
-            font-size: 1rem;
-            opacity: 0.9;
-            background: rgba(255,255,255,0.2);
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
+        /* Hide scrollbar for clean horizontal scrolling */
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
         }
-
-        .container {
-            max-width: 800px;
-            margin: -20px auto 40px; /* Pull up to overlap header */
-            padding: 0 15px;
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-
-        /* 重點提醒卡片 */
-        .notice-card {
-            background: #fff;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-            border-top: 5px solid var(--highlight-color);
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
         }
-
-        .notice-title {
-            color: #d35400;
-            font-weight: bold;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
+        .tab-content.active {
+            display: block;
         }
-
-        .notice-item {
-            display: flex;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .day-card.active-day {
+            border-color: #F97316; /* orange-500 */
+            background-color: #FFF7ED; /* orange-50 */
+            box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.2);
+            transform: scale(1.05);
+        }
+        /* Mobile Bottom Nav Styles */
+        .bottom-nav-item {
+            position: relative;
+            transition: all 0.2s;
+        }
+        .bottom-nav-item.active {
+            color: #C05621;
+        }
+        .bottom-nav-item.active::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 4px;
+            background-color: #C05621;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+        /* AI Chat Bubbles */
+        .chat-bubble {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 16px;
             margin-bottom: 12px;
-            align-items: flex-start;
-        }
-
-        .notice-icon {
-            margin-right: 10px;
-            font-size: 1.2rem;
-            min-width: 25px;
-        }
-
-        /* 行程卡片 */
-        .day-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-        }
-
-        .day-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .day-body {
-            padding: 20px;
-        }
-
-        .location-title {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .flag {
-            margin-right: 8px;
-            font-size: 1.4rem;
-        }
-
-        .weather-badge {
-            display: inline-block;
-            background-color: var(--info-bg);
-            color: #2980b9;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .info-block {
-            background-color: #fafafa;
-            border-left: 4px solid var(--accent-color);
-            padding: 12px 15px;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .info-title {
-            color: var(--accent-color);
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .info-text {
+            line-height: 1.5;
             font-size: 0.95rem;
-            color: #555;
         }
-
-        /* 重點標示 */
-        .highlight-red {
-            color: #c0392b;
-            font-weight: bold;
+        .chat-user {
+            background-color: #FEEBC8; /* Orange-100 */
+            color: #7B341E;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
         }
-
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: #888;
-            font-size: 0.8rem;
+        .chat-ai {
+            background-color: #EBF8FF; /* Blue-100 */
+            color: #2C5282;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
         }
-
-        .btn-print {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background-color: #fff;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 20px;
-            text-decoration: none;
-            font-weight: bold;
+        .markdown-body ul { list-style-type: disc; padding-left: 1.5em; }
+        .markdown-body ol { list-style-type: decimal; padding-left: 1.5em; }
+        .markdown-body p { margin-bottom: 0.5em; }
+        .loading-dots::after {
+            content: ' .';
+            animation: dots 1.5s steps(5, end) infinite;
         }
-
+        @keyframes dots {
+            0%, 20% { content: ' .'; }
+            40% { content: ' ..'; }
+            60% { content: ' ...'; }
+            80%, 100% { content: ' ....'; }
+        }
     </style>
 </head>
-<body>
+<body class="flex flex-col min-h-screen pb-20 md:pb-0">
 
-<header>
-    <h1>巴爾幹半島冬日之旅</h1>
-    <div class="subtitle">12/18 - 12/30 (13天)</div>
-</header>
-
-<div class="container">
-
-    <!-- 總體提醒 -->
-    <div class="notice-card">
-        <div class="notice-title">⚠️ 出發前核心備忘錄</div>
-        <div class="notice-item">
-            <span class="notice-icon">🧅</span>
-            <div><strong>洋蔥式穿搭：</strong>室內暖氣極強(20°C+)，戶外極冷(-5°C)。務必內層透氣、外層防風好穿脫。</div>
-        </div>
-        <div class="notice-item">
-            <span class="notice-icon">👢</span>
-            <div><strong>鞋子決勝負：</strong>斯洛維尼亞、羅馬尼亞易結冰積雪。請穿防滑、防水、保暖的靴子。</div>
-        </div>
-        <div class="notice-item">
-            <span class="notice-icon">💧</span>
-            <div><strong>飲水安全：</strong>除斯洛維尼亞/克羅埃西亞外，建議全程購買瓶裝水。</div>
-        </div>
-        <div class="notice-item">
-            <span class="notice-icon">💶</span>
-            <div><strong>零錢準備：</strong>歐洲公廁多需付費 (0.5~1歐元)，請預留硬幣。</div>
-        </div>
-    </div>
-
-    <!-- Day 1 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 1</span>
-            <span>12/18 (四)</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title"><span class="flag">🇹🇼</span> 台北 出發</div>
-            <div class="weather-badge">✈️ 機艙恆溫 (乾燥)</div>
-            <div class="info-block" style="border-left-color: #95a5a6;">
-                <span class="info-title" style="color: #7f8c8d;">💡 貼心提醒</span>
-                <div class="info-text">長途飛行請穿著寬鬆。過安檢後裝滿水瓶，機上隨時補水保濕。</div>
+    <!-- Top Header (Simplified for Mobile) -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-center md:justify-between">
+            <div class="flex items-center space-x-2">
+                <span class="text-xl md:text-2xl font-bold text-orange-700">🇧🇬 巴爾幹冬遊</span>
+            </div>
+            <!-- Desktop Nav (Hidden on Mobile) -->
+            <div class="hidden md:flex space-x-6">
+                <button onclick="switchTab('dashboard')" class="desktop-nav-item px-3 py-2 text-sm font-medium hover:text-orange-700 transition" data-target="dashboard">總覽</button>
+                <button onclick="switchTab('itinerary')" class="desktop-nav-item px-3 py-2 text-sm font-medium hover:text-orange-700 transition" data-target="itinerary">行程</button>
+                <button onclick="switchTab('souvenirs')" class="desktop-nav-item px-3 py-2 text-sm font-medium hover:text-orange-700 transition" data-target="souvenirs">伴手禮</button>
+                <button onclick="switchTab('ai-assistant')" class="desktop-nav-item px-3 py-2 text-sm font-medium hover:text-orange-700 transition text-purple-600 font-bold" data-target="ai-assistant">✨ AI 導遊</button>
+                <button onclick="switchTab('analytics')" class="desktop-nav-item px-3 py-2 text-sm font-medium hover:text-orange-700 transition" data-target="analytics">分析</button>
             </div>
         </div>
-    </div>
+    </header>
 
-    <!-- Day 2 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 2</span>
-            <span>12/19 (五)</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title"><span class="flag">🇸🇮</span> 斯洛維尼亞 (布雷德)</div>
-            <div class="weather-badge">❄️ -3°C ~ 4°C (極冷/降雪)</div>
-            <div class="info-block">
-                <span class="info-title">🚫 文化禁忌</span>
-                <div class="info-text">
-                    1. 進入當地民宿或住家通常<strong>必須脫鞋</strong>。<br>
-                    2. 人民安靜內斂，公共場合請降低音量。
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-6 w-full overflow-hidden">
+
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboard" class="tab-content active space-y-6">
+            <div class="text-center space-y-2">
+                <h1 class="text-2xl md:text-4xl font-bold text-gray-800">17 天冬遊指南</h1>
+                <p class="text-sm md:text-xl text-gray-600">12/18 - 1/3 | 聖誕跨年特別團</p>
+                
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <div class="bg-orange-50 p-3 rounded-xl border border-orange-100 flex flex-col items-center justify-center">
+                        <span class="text-2xl font-bold text-orange-700">9 國</span>
+                        <span class="text-xs text-orange-800 opacity-75">探索國家</span>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded-xl border border-blue-100 flex flex-col items-center justify-center">
+                        <span class="text-2xl font-bold text-blue-700">-5°C</span>
+                        <span class="text-xs text-blue-800 opacity-75">平均低溫</span>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-xl border border-green-100 flex flex-col items-center justify-center">
+                        <span class="text-2xl font-bold text-green-700">8 人</span>
+                        <span class="text-xs text-green-800 opacity-75">親友團</span>
+                    </div>
+                    <div class="bg-purple-50 p-3 rounded-xl border border-purple-100 flex flex-col items-center justify-center">
+                        <span class="text-2xl font-bold text-purple-700">5+</span>
+                        <span class="text-xs text-purple-800 opacity-75">貨幣種類</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Winter Survival Kit -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-blue-600 px-4 py-3 flex justify-between items-center">
+                    <h2 class="text-white font-bold flex items-center">
+                        ❄️ 行前檢核表
+                    </h2>
+                    <span class="text-xs text-blue-100 bg-blue-700 px-2 py-1 rounded-full" id="progress-text">0/8</span>
+                </div>
+                <div class="p-4">
+                    <div class="grid gap-3" id="checklist-container">
+                        <!-- JS populated -->
+                    </div>
+                    <div class="mt-4 p-3 bg-yellow-50 rounded-lg text-xs text-yellow-800 border border-yellow-100 flex items-start">
+                        <span class="mr-2 text-lg">💡</span>
+                        <span><strong>洋蔥式穿法：</strong>車內暖氣約20°C+。內穿薄長袖，外罩防風厚外套，方便穿脫。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Tips Scroller -->
+            <div>
+                <h3 class="font-bold text-gray-700 mb-2 px-1">速查小幫手</h3>
+                <div class="flex overflow-x-auto space-x-4 pb-2 hide-scroll -mx-4 px-4">
+                    <div class="flex-shrink-0 w-64 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                        <div class="text-xl mb-1">🌞 日照提醒</div>
+                        <p class="text-sm text-gray-500">下午 <strong>4:00</strong> 天黑。行程早出早歸，晚上可逛超市。</p>
+                    </div>
+                    <div class="flex-shrink-0 w-64 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                        <div class="text-xl mb-1">💊 備藥清單</div>
+                        <p class="text-sm text-gray-500">暈車藥(山路多)、感冒/腸胃藥。帶乳液護唇膏。</p>
+                    </div>
+                    <div class="flex-shrink-0 w-64 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                        <div class="text-xl mb-1">🔌 電壓插座</div>
+                        <p class="text-sm text-gray-500">雙孔圓形 (220V)。自備萬用轉接頭。</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Day 3 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 3</span>
-            <span>12/20 (六)</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title"><span class="flag">🇭🇷</span> 克羅埃西亞 (札格雷布)</div>
-            <div class="weather-badge">☁️ -1°C ~ 5°C (寒冷)</div>
-            <div class="info-block">
-                <span class="info-title">🗣️ 聊天禁忌</span>
-                <div class="info-text">避免談論 1990 年代的南斯拉夫內戰。當地人自認是「中歐人」，以此為榮。</div>
+        <!-- ITINERARY SECTION -->
+        <div id="itinerary" class="tab-content space-y-4">
+            <div class="flex justify-between items-end px-1">
+                <h2 class="text-xl font-bold text-gray-800">📅 每日行程</h2>
+                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">左右滑動選擇</span>
             </div>
-        </div>
-    </div>
-
-    <!-- Day 4 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 4</span>
-            <span>12/21 (日)</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title"><span class="flag">🇭🇷</span> 十六湖國家公園</div>
-            <div class="weather-badge">❄️ -4°C ~ 3°C (易結冰)</div>
-            <div class="info-block" style="border-left-color: #e74c3c;">
-                <span class="info-title" style="color: #e74c3c;">⚠️ 安全第一</span>
-                <div class="info-text">冬季木棧道極為濕滑，<strong>嚴禁奔跑</strong>。拍照請先站定腳步，以免滑落湖中。</div>
+            
+            <!-- Timeline Navigation (Horizontal Scroll) -->
+            <div class="sticky top-0 bg-[#FDFBF7] pt-2 pb-4 z-10 -mx-4 px-4 overflow-hidden">
+                <div class="flex overflow-x-auto space-x-3 hide-scroll scroll-smooth" id="timeline-scroll">
+                    <!-- JS will populate timeline days -->
+                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Day 5 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 5</span>
-            <span>12/22 (一)</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title"><span class="flag">🇧🇦</span> 波士尼亞 (莫斯塔爾)</div>
-            <div class="weather-badge">🌧️ 5°C ~ 12°C (多雨)</div>
-            <div class="info-block">
-                <span class="info-title">🕌 宗教與安全</span>
-                <div class="info-text">
-                    1. 參觀清真寺務必脫鞋，女性需備頭巾。<br>
-                    2. <strong>絕對禁止</strong>進入野外標示「地雷區」的荒地 (景點區已除雷安全)。
+            <!-- Day Detail View -->
+            <div id="day-detail" class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden min-h-[400px]">
+                <!-- Dynamic Content -->
+                <div class="flex items-center justify-center h-full text-gray-400">
+                    載入中...
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Day 6 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 6</span>
-            <span>12/23 (二)</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title"><span class="flag">🇲🇪</span> 蒙特內哥羅 (科托)</div>
-            <div class="weather-badge">🌧️ 4°C ~ 11°C (濕冷)</div>
-            <div class="info-block">
-                <span class="info-title">🐢 慢活哲學</span>
-                <div class="info-text">當地口頭禪 "Polako" (慢慢來)。餐廳上菜慢是常態，<strong>催促被視為極不禮貌</strong>。</div>
+        <!-- SOUVENIRS & CUSTOMS SECTION -->
+        <div id="souvenirs" class="tab-content space-y-6">
+            <!-- Customs Checker -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-red-50 p-4 border-b border-red-100">
+                    <h2 class="text-lg font-bold text-red-800 flex items-center">
+                        <span class="text-xl mr-2">🚨</span> 台灣海關紅綠燈
+                    </h2>
+                    <p class="text-xs text-red-600 mt-1">點擊物品查看是否可帶回國</p>
+                </div>
+                
+                <div class="p-4">
+                    <div class="flex flex-wrap gap-2 mb-4" id="customs-filters">
+                        <!-- Filters generated by JS -->
+                    </div>
+                    <div id="customs-result" class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-center transition-all duration-300">
+                        <span class="text-gray-400 text-sm">請點擊上方按鈕檢查</span>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Day 7 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 7</span>
-            <span>12/24 (三)</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title"><span class="flag">🇦🇱</span> 阿爾巴尼亞</div>
-            <div class="weather-badge">☁️ 0°C ~ 10°C (有霧)</div>
-            <div class="info-block" style="border-left-color: #8e44ad;">
-                <span class="info-title" style="color: #8e44ad;">🤯 肢體語言大反轉</span>
-                <div class="info-text">
-                    <strong class="highlight-red">搖頭 = Yes (是)</strong><br>
-                    <strong class="highlight-red">點頭 = No (不是)</strong><br>
-                    與台灣完全相反！建議用口語確認。
+            <!-- Souvenirs List -->
+            <div>
+                <div class="flex justify-between items-center mb-3 px-1">
+                    <h2 class="text-xl font-bold text-gray-800">🛍️ 必買推薦</h2>
+                </div>
+                
+                <!-- Horizontal Filter Scroll -->
+                <div class="flex overflow-x-auto space-x-2 pb-4 hide-scroll -mx-4 px-4 mb-2">
+                     <button onclick="filterSouvenirs('all')" class="flex-shrink-0 px-4 py-2 rounded-full bg-gray-200 text-xs font-bold transition active-souvenir-filter text-gray-700" id="filter-all">全部</button>
+                     <button onclick="filterSouvenirs('保加利亞')" class="flex-shrink-0 px-4 py-2 rounded-full bg-gray-100 text-xs font-medium transition text-gray-600" id="filter-保加利亞">保加利亞</button>
+                     <button onclick="filterSouvenirs('羅馬尼亞')" class="flex-shrink-0 px-4 py-2 rounded-full bg-gray-100 text-xs font-medium transition text-gray-600" id="filter-羅馬尼亞">羅馬尼亞</button>
+                     <button onclick="filterSouvenirs('克羅埃西亞')" class="flex-shrink-0 px-4 py-2 rounded-full bg-gray-100 text-xs font-medium transition text-gray-600" id="filter-克羅埃西亞">克羅埃西亞</button>
+                     <button onclick="filterSouvenirs('馬其頓')" class="flex-shrink-0 px-4 py-2 rounded-full bg-gray-100 text-xs font-medium transition text-gray-600" id="filter-馬其頓">馬其頓</button>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4" id="souvenir-grid">
+                    <!-- JS Populates Souvenirs -->
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Day 8 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 8</span>
-            <span>12/25 (四)</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title"><span class="flag">🇲🇰</span> 北馬其頓</div>
-            <div class="weather-badge">🌫️ -2°C ~ 6°C (濃霧)</div>
-            <div class="info-block">
-                <span class="info-title">🚫 政治敏感</span>
-                <div class="info-text">國名爭議對希臘和當地人極為敏感，建議盡量避談政治話題。</div>
+        <!-- AI ASSISTANT SECTION (NEW) -->
+        <div id="ai-assistant" class="tab-content space-y-6">
+            <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-6 rounded-b-3xl shadow-md -mx-4 mb-4 text-white">
+                <h2 class="text-2xl font-bold mb-2">✨ AI 隨身導遊</h2>
+                <p class="text-purple-100 text-sm">由 Google Gemini 驅動，為您解答旅途疑問與推薦送禮靈感。</p>
             </div>
-        </div>
-    </div>
 
-    <!-- Day 9 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 9</span>
-            <span>12/26 (五)</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title"><span class="flag">🇧🇬</span> 保加利亞 (索菲亞)</div>
-            <div class="weather-badge">❄️ -3°C ~ 4°C (寒冷)</div>
-            <div class="info-block">
-                <span class="info-title">💡 禮儀與購物</span>
-                <div class="info-text">
-                    1. 同樣是<strong>「搖頭Yes、點頭No」</strong>。<br>
-                    2. 盛產玫瑰油與保養品，是最佳伴手禮購買點。
+            <!-- AI Feature Switcher -->
+            <div class="flex space-x-2 bg-gray-100 p-1 rounded-xl mx-1">
+                <button onclick="switchAIMode('chat')" id="btn-ai-chat" class="flex-1 py-2 rounded-lg text-sm font-bold bg-white shadow text-purple-700 transition">💬 問問導遊</button>
+                <button onclick="switchAIMode('gift')" id="btn-ai-gift" class="flex-1 py-2 rounded-lg text-sm font-medium text-gray-500 hover:bg-white/50 transition">🎁 伴手禮智囊</button>
+            </div>
+
+            <!-- Feature 1: Chat with Guide -->
+            <div id="ai-mode-chat" class="space-y-4">
+                <div id="chat-history" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 h-[400px] overflow-y-auto flex flex-col">
+                    <!-- Welcome Message -->
+                    <div class="chat-bubble chat-ai">
+                        嗨！我是您的 AI 導遊。這趟巴爾幹 17 天之旅有任何問題都可以問我喔！<br>例如：「匈牙利要給多少小費？」、「布朗城堡有什麼故事？」
+                    </div>
+                </div>
+                
+                <div class="flex gap-2">
+                    <input type="text" id="chat-input" placeholder="輸入您的問題..." class="flex-grow p-3 rounded-xl border border-gray-300 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition">
+                    <button onclick="handleChat()" class="bg-purple-600 text-white p-3 rounded-xl hover:bg-purple-700 transition shadow-md disabled:bg-gray-400" id="chat-submit">
+                        ➤
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feature 2: Gift Recommender -->
+            <div id="ai-mode-gift" class="space-y-4 hidden">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                    <h3 class="font-bold text-gray-800 mb-4 flex items-center"><span class="text-xl mr-2">🎁</span> 誰是幸運兒？</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">送禮對象</label>
+                            <input type="text" id="gift-recipient" placeholder="例如：喜歡做菜的媽媽、挑剔的主管..." class="w-full p-3 rounded-xl border border-gray-200 focus:border-purple-500 outline-none bg-gray-50">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">國家/地區 (可選)</label>
+                            <select id="gift-country" class="w-full p-3 rounded-xl border border-gray-200 focus:border-purple-500 outline-none bg-gray-50">
+                                <option value="全行程">全行程 (九國)</option>
+                                <option value="保加利亞">保加利亞 (玫瑰)</option>
+                                <option value="羅馬尼亞">羅馬尼亞</option>
+                                <option value="匈牙利">匈牙利</option>
+                                <option value="克羅埃西亞">克羅埃西亞</option>
+                                <option value="馬其頓">馬其頓</option>
+                            </select>
+                        </div>
+
+                        <button onclick="recommendGift()" id="gift-submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold py-3 rounded-xl shadow-md hover:opacity-90 transition flex justify-center items-center">
+                            ✨ 生成推薦清單
+                        </button>
+                    </div>
+                </div>
+
+                <div id="gift-result" class="hidden bg-white rounded-2xl shadow-sm border border-purple-100 p-6 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-purple-500"></div>
+                    <h4 class="font-bold text-purple-800 mb-2">💡 AI 推薦建議：</h4>
+                    <div id="gift-content" class="text-sm text-gray-700 markdown-body leading-relaxed space-y-2">
+                        <!-- Result goes here -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Day 10 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 10</span>
-            <span>12/27 (六)</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title"><span class="flag">🇷🇴</span> 羅馬尼亞 (布加勒斯特)</div>
-            <div class="weather-badge">❄️ -4°C ~ 3°C (極冷)</div>
-            <div class="info-block" style="border-left-color: #d35400;">
-                <span class="info-title" style="color: #d35400;">⚠️ 防詐提醒</span>
-                <div class="info-text">計程車與路邊小販可能會有漫天喊價情況，務必先確認價格或使用正規車輛。</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Day 11 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 11</span>
-            <span>12/28 (日)</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title"><span class="flag">🇷🇴</span> 羅馬尼亞 (吸血鬼城堡)</div>
-            <div class="weather-badge">☃️ -6°C ~ 1°C (全程最冷)</div>
-            <div class="info-block">
-                <span class="info-title">🧛 文化尊重</span>
-                <div class="info-text">
-                    1. 當地視德古拉原型(弗拉德三世)為民族英雄，不喜歡遊客過度妖魔化。<br>
-                    2. 山區體感極低，<strong>暖暖包請貼滿</strong>。
+        <!-- ANALYTICS SECTION -->
+        <div id="analytics" class="tab-content space-y-6">
+            <h2 class="text-xl font-bold text-gray-800 px-1">📊 旅程數據</h2>
+            
+            <!-- Temperature Chart -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="text-sm font-bold text-gray-700 mb-2 flex items-center">
+                    <span class="mr-2">🌡️</span> 每日氣溫預測
+                </h3>
+                <div class="chart-container">
+                    <canvas id="tempChart"></canvas>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Day 12/13 -->
-    <div class="day-card">
-        <div class="day-header">
-            <span>Day 12/13</span>
-            <span>12/29 - 30</span>
-        </div>
-        <div class="day-body">
-            <div class="location-title">✈️ 返程 -> 溫暖的家</div>
-            <div class="info-block" style="border-left-color: #27ae60;">
-                <span class="info-title" style="color: #27ae60;">💰 離境提醒</span>
-                <div class="info-text">記得把剩餘的零錢在機場花掉，或預留給司機/領隊作為最後的小費。</div>
+            <!-- Currency Chart -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                <h3 class="text-sm font-bold text-gray-700 mb-2 flex items-center">
+                    <span class="mr-2">💰</span> 貨幣使用天數
+                </h3>
+                <div class="chart-container">
+                    <canvas id="currencyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Fun Facts -->
+            <div class="bg-orange-50 p-5 rounded-xl border border-orange-100">
+                <h3 class="font-bold text-orange-800 mb-3 text-sm">🧐 巴爾幹冷知識</h3>
+                <ul class="space-y-3 text-sm text-gray-700">
+                    <li class="flex items-start">
+                        <span class="mr-2 text-orange-500">•</span>
+                        <span><strong>搖頭 Yes 點頭 No：</strong> 保加利亞傳統肢體語言與我們相反，小心誤會！</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2 text-orange-500">•</span>
+                        <span><strong>兩個聖誕節：</strong> 羅馬尼亞過 12/25，馬其頓/塞爾維亞過 1/7。</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-2 text-orange-500">•</span>
+                        <span><strong>波士尼亞咖啡：</strong> 喝法是先把方糖咬一口含著，再喝咖啡。</span>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
 
-</div>
+    </main>
 
-<footer>
-    <p>祝旅途愉快 Safe Travels!</p>
-    <p style="opacity: 0.6; font-size: 0.7rem;">Weather based on historical averages.</p>
-</footer>
+    <!-- Bottom Navigation Bar (Mobile Only) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-safe z-50">
+        <div class="flex justify-around items-center h-16">
+            <button onclick="switchTab('dashboard')" class="bottom-nav-item active w-full h-full flex flex-col items-center justify-center text-gray-400" data-target="dashboard">
+                <span class="text-xl mb-1">🏠</span>
+                <span class="text-[10px] font-medium">總覽</span>
+            </button>
+            <button onclick="switchTab('itinerary')" class="bottom-nav-item w-full h-full flex flex-col items-center justify-center text-gray-400" data-target="itinerary">
+                <span class="text-xl mb-1">📅</span>
+                <span class="text-[10px] font-medium">行程</span>
+            </button>
+            <button onclick="switchTab('souvenirs')" class="bottom-nav-item w-full h-full flex flex-col items-center justify-center text-gray-400" data-target="souvenirs">
+                <span class="text-xl mb-1">🛍️</span>
+                <span class="text-[10px] font-medium">伴手禮</span>
+            </button>
+            <button onclick="switchTab('ai-assistant')" class="bottom-nav-item w-full h-full flex flex-col items-center justify-center text-gray-400" data-target="ai-assistant">
+                <span class="text-xl mb-1 text-purple-600">✨</span>
+                <span class="text-[10px] font-medium text-purple-600">AI 導遊</span>
+            </button>
+            <button onclick="switchTab('analytics')" class="bottom-nav-item w-full h-full flex flex-col items-center justify-center text-gray-400" data-target="analytics">
+                <span class="text-xl mb-1">📊</span>
+                <span class="text-[10px] font-medium">分析</span>
+            </button>
+        </div>
+    </nav>
 
+    <!-- JavaScript Logic -->
+    <script>
+        // --- DATA STORAGE ---
+        const itineraryData = [
+            { day: 1, date: "12/18", country: "出發", loc: "桃園 ✈️ 北京", tempH: 20, tempL: 15, weather: "機上", desc: "長途飛行建議穿著寬鬆舒適。保溫瓶請在過安檢後裝水。", tips: "帶著愉快心情出發！", gift: "" },
+            { day: 2, date: "12/19", country: "匈牙利", loc: "布達佩斯 ➝ 塞格德", tempH: 4, tempL: -2, weather: "寒冷", desc: "參觀布達皇宮、英雄廣場。注意匈牙利喝啤酒『不敲杯』的傳統禁忌。", tips: "貨幣：福林 (HUF)。", gift: "紅椒粉、鵝肝醬(需全熟)、貴腐酒、刺繡" },
+            { day: 3, date: "12/20", country: "羅馬尼亞", loc: "蒂米甚瓦拉 ➝ 錫比烏", tempH: 3, tempL: -3, weather: "冷/山區", desc: "蒂米甚瓦拉有小維也納之稱。錫比烏屋頂有『眼睛』氣窗。", tips: "進入羅馬尼亞，使用列伊 (RON)。跨國界需耐心。", gift: "Gerovital 保養品、野莓果醬、蜂蜜" },
+            { day: 4, date: "12/21", country: "羅馬尼亞", loc: "錫比烏 ➝ 布拉索夫", tempH: 0, tempL: -5, weather: "雪/冷", desc: "造訪德古拉(布朗)城堡。山區寒冷可能有雪，參觀教堂請脫帽。", tips: "今日路程較多山路，備妥暈車藥。", gift: "Horezu 陶瓷、吸血鬼周邊、梅子白蘭地" },
+            { day: 5, date: "12/22", country: "羅馬尼亞", loc: "布拉索夫 ➝ 布加勒斯特", tempH: 5, tempL: -1, weather: "寒冷", desc: "參觀世界第二大建築『人民宮』。注意大城市人多，背包前背防扒手。", tips: "週日市區交通順暢，但商店可能早關。", gift: "傳統襯衫 (Ie)、彩繪蛋工藝品" },
+            { day: 6, date: "12/23", country: "保加利亞", loc: "布加勒斯特 ➝ 大塔爾諾沃", tempH: 6, tempL: -2, weather: "涼冷", desc: "進入保加利亞。查雷威茲城堡。注意『點頭No，搖頭Yes』的特殊習俗。", tips: "貨幣：列弗 (BGN)。", gift: "★玫瑰製品(精油/護手霜)、特羅揚陶瓷" },
+            { day: 7, date: "12/24", country: "保加利亞", loc: "卡贊勒克 ➝ 索菲亞", tempH: 4, tempL: -3, weather: "寒冷", desc: "平安夜！造訪玫瑰谷。索菲亞市區有過節氣氛，晚餐後商店多關門。", tips: "晚餐習俗吃奇數道素菜。", gift: "玫瑰谷正宗玫瑰產品、乳酸菌製品" },
+            { day: 8, date: "12/25", country: "馬其頓", loc: "索菲亞 ➝ 史高比耶", tempH: 8, tempL: -5, weather: "山區冷", desc: "聖誕節快樂！參觀里拉修道院(極莊嚴，勿開閃光燈)。馬其頓不過12/25聖誕，商店照開。", tips: "跨入北馬其頓。", gift: "無特別標註，可買里拉修道院紀念品" },
+            { day: 9, date: "12/26", country: "科索沃", loc: "史高比耶 ⇆ 普利斯緹娜", tempH: 5, tempL: -2, weather: "寒冷", desc: "歐洲最年輕國家。政治敏感，避免談論塞爾維亞關係。Newborn 紀念碑。", tips: "科索沃用歐元！方便購物。", gift: "銀絲工藝品 (Filigree)、Ajvar 紅椒醬" },
+            { day: 10, date: "12/27", country: "馬其頓", loc: "史高比耶 ➝ 奧赫里德", tempH: 7, tempL: 0, weather: "濕冷", desc: "奧赫里德湖(世界遺產)，巴爾幹的耶路撒冷。湖光山色極美。", tips: "湖邊較濕冷，注意保暖。", gift: "★奧赫里德珍珠(必買，認明證書)" },
+            { day: 11, date: "12/28", country: "阿爾巴尼亞", loc: "奧赫里德 ➝ 提拉娜", tempH: 12, tempL: 2, weather: "微溫", desc: "碉堡王國。斯坎德培廣場。傍晚有 Xhiro 散步習慣。", tips: "貨幣：列克 (Lek)。", gift: "碉堡造型煙灰缸、Skanderbeg 白蘭地、橄欖油" },
+            { day: 12, date: "12/29", country: "蒙特內哥羅", loc: "提拉娜 ➝ 波德哥里察", tempH: 11, tempL: 3, weather: "涼爽", desc: "前往黑山共和國首都。參觀基督復活大教堂。", tips: "蒙特內哥羅單方面使用歐元。", gift: "Vranac 紅酒" },
+            { day: 13, date: "12/30", country: "波士尼亞", loc: "科托爾 ➝ 莫斯塔爾", tempH: 10, tempL: 2, weather: "多雨", desc: "科托爾灣(貓咪之城)。莫斯塔爾古橋，體驗土耳其風情。", tips: "峽灣區多雨，雨具隨身。", gift: "貓咪工藝品、銅製咖啡具、彩繪燈飾" },
+            { day: 14, date: "12/31", country: "克羅埃西亞", loc: "塞拉耶佛 ➝ 奧西耶克", tempH: 3, tempL: -3, weather: "寒冷", desc: "參觀塞拉耶佛銅匠街。拉車至克羅埃西亞跨年！超市下午關門請早備貨。", tips: "克羅埃西亞用歐元。", gift: "塞拉耶佛子彈筆、銅器" },
+            { day: 15, date: "1/1", country: "匈牙利", loc: "奧西耶克 ➝ 布達佩斯", tempH: 3, tempL: -2, weather: "寒冷", desc: "元旦！商店多不開，安排戶外景點。欣賞多瑙河夜景。", tips: "行程尾聲，整理戰利品。", gift: "Kraš 巧克力、Licitar 心型薑餅、領帶" },
+            { day: 16, date: "1/2", country: "返程", loc: "布達佩斯 ✈️", tempH: 4, tempL: -2, weather: "機上", desc: "前往機場辦理退稅(若有達門檻)。帶著滿滿回憶回家。", tips: "退稅物品建議放手提或易拿處。", gift: "" },
+            { day: 17, date: "1/3", country: "抵達", loc: "甜蜜的家", tempH: 20, tempL: 18, weather: "溫暖", desc: "平安抵達台灣。注意入境勿帶肉類、新鮮蔬果。", tips: "休息調整時差。", gift: "" }
+        ];
+
+        const checklistItems = [
+            "❄️ 厚外套 (羽絨衣)",
+            "🧣 圍巾、毛帽、手套",
+            "🥾 防滑防水鞋",
+            "🧴 乳液 & 護唇膏",
+            "💊 常備藥 (暈車/腸胃)",
+            "🔌 雙孔圓轉接頭(220V)",
+            "🍜 泡麵/零食",
+            "💶 歐元現金"
+        ];
+
+        const souvenirsList = [
+            { name: "玫瑰精油/保養品", country: "保加利亞", desc: "必買首選！正宗玫瑰產品。", tags: ["cosmetic"] },
+            { name: "奧赫里德珍珠", country: "馬其頓", desc: "人造珍珠，光澤獨特，需認明證書。", tags: ["jewelry"] },
+            { name: "Gerovital 抗老霜", country: "羅馬尼亞", desc: "國寶級保養品，CP值極高。", tags: ["cosmetic"] },
+            { name: "紅椒粉 (Paprika)", country: "匈牙利", desc: "經典香料，分甜辣兩種。", tags: ["food"] },
+            { name: "Kraš 巧克力", country: "克羅埃西亞", desc: "國民品牌，Bajadera 最有名。", tags: ["food"] },
+            { name: "銅製咖啡具", country: "波士尼亞", desc: "土耳其風格手工銅器。", tags: ["craft"] },
+            { name: "特羅揚陶瓷", country: "保加利亞", desc: "獨特水滴花紋彩繪陶器。", tags: ["craft"] },
+            { name: "銀絲工藝品", country: "科索沃/馬其頓", desc: "精細銀飾，價格親民。", tags: ["jewelry"] },
+            { name: "Horezu 陶瓷", country: "羅馬尼亞", desc: "非物質文化遺產。", tags: ["craft"] },
+            { name: "Ajvar 紅椒醬", country: "馬其頓", desc: "佐餐神醬，馬其頓產最好吃。", tags: ["food"] },
+            { name: "子彈筆", country: "波士尼亞", desc: "回收戰時彈殼製成。", tags: ["craft"] }
+        ];
+
+        const customsRules = {
+            "肉類製品": { status: "stop", msg: "❌ 禁止！香腸/火腿/肉乾/含肉罐頭皆不可帶。" },
+            "新鮮蔬果": { status: "stop", msg: "❌ 禁止！新鮮水果/蔬菜/種子禁止入境。" },
+            "巧克力/餅乾": { status: "go", msg: "✅ 可帶！加工餅乾、糖果、巧克力皆可。" },
+            "起司/乳製品": { status: "caution", msg: "⚠️ 注意！建議買硬起司真空包裝，生乳製禁止。" },
+            "酒類": { status: "caution", msg: "⚠️ 18歲以上免稅1公升。上限5公升需申報。" },
+            "紅椒粉/香料": { status: "go", msg: "✅ 可帶！乾燥處理過的香料沒問題。" }
+        };
+
+        // --- GEMINI API CONFIGURATION ---
+        const apiKey = ""; // Placeholder for runtime injection
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChecklist();
+            renderTimeline();
+            renderCustomsFilters();
+            renderSouvenirs(souvenirsList);
+            selectDay(1); // Default to Day 1
+            initCharts();
+        });
+
+        // --- NAVIGATION LOGIC ---
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Update Bottom Nav (Mobile)
+            document.querySelectorAll('.bottom-nav-item').forEach(el => {
+                if(el.dataset.target === tabId) {
+                    el.classList.add('active', 'text-orange-700');
+                    el.classList.remove('text-gray-400');
+                    if(tabId === 'ai-assistant') el.querySelector('span').classList.add('text-purple-600');
+                } else {
+                    el.classList.remove('active', 'text-orange-700');
+                    el.classList.add('text-gray-400');
+                    if(el.dataset.target === 'ai-assistant') el.querySelector('span').classList.remove('text-purple-600');
+                }
+            });
+
+            // Update Desktop Nav
+            document.querySelectorAll('.desktop-nav-item').forEach(el => {
+                if(el.dataset.target === tabId) {
+                    el.classList.add('text-orange-700', 'font-bold');
+                    el.classList.remove('text-gray-600');
+                } else {
+                    el.classList.remove('text-orange-700', 'font-bold');
+                    el.classList.add('text-gray-600');
+                }
+            });
+
+            // Re-render charts logic
+            if (tabId === 'analytics') {
+                setTimeout(initCharts, 100);
+            }
+        }
+
+        // --- AI TAB LOGIC ---
+        function switchAIMode(mode) {
+            const chatBtn = document.getElementById('btn-ai-chat');
+            const giftBtn = document.getElementById('btn-ai-gift');
+            const chatView = document.getElementById('ai-mode-chat');
+            const giftView = document.getElementById('ai-mode-gift');
+
+            if (mode === 'chat') {
+                chatBtn.classList.add('bg-white', 'shadow', 'text-purple-700', 'font-bold');
+                chatBtn.classList.remove('text-gray-500', 'font-medium');
+                giftBtn.classList.remove('bg-white', 'shadow', 'text-purple-700', 'font-bold');
+                giftBtn.classList.add('text-gray-500', 'font-medium');
+                
+                chatView.classList.remove('hidden');
+                giftView.classList.add('hidden');
+            } else {
+                giftBtn.classList.add('bg-white', 'shadow', 'text-purple-700', 'font-bold');
+                giftBtn.classList.remove('text-gray-500', 'font-medium');
+                chatBtn.classList.remove('bg-white', 'shadow', 'text-purple-700', 'font-bold');
+                chatBtn.classList.add('text-gray-500', 'font-medium');
+
+                giftView.classList.remove('hidden');
+                chatView.classList.add('hidden');
+            }
+        }
+
+        async function callGemini(prompt) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: prompt
+                            }]
+                        }]
+                    }),
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data.candidates[0].content.parts[0].text;
+            } catch (error) {
+                clearTimeout(timeoutId);
+                console.error('Gemini Error:', error);
+                if (error.name === 'AbortError') {
+                    return "連線逾時，請檢查網路後再試一次。";
+                }
+                return "抱歉，AI 目前無法回應，請稍後再試。";
+            }
+        }
+
+        async function handleChat() {
+            const inputEl = document.getElementById('chat-input');
+            const submitBtn = document.getElementById('chat-submit');
+            const historyEl = document.getElementById('chat-history');
+            const userText = inputEl.value.trim();
+
+            if (!userText) return;
+
+            // UI Update: User Message
+            inputEl.value = '';
+            inputEl.disabled = true;
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50');
+            
+            const userBubble = document.createElement('div');
+            userBubble.className = 'chat-bubble chat-user';
+            userBubble.textContent = userText;
+            historyEl.appendChild(userBubble);
+            historyEl.scrollTop = historyEl.scrollHeight;
+
+            // UI Update: Loading Bubble
+            const loadingBubble = document.createElement('div');
+            loadingBubble.className = 'chat-bubble chat-ai loading-dots';
+            loadingBubble.textContent = '思考中';
+            historyEl.appendChild(loadingBubble);
+            historyEl.scrollTop = historyEl.scrollHeight;
+
+            // Construct Prompt
+            const itineraryContext = JSON.stringify(itineraryData.map(d => `Day ${d.day} (${d.date}): ${d.country} - ${d.loc}. Desc: ${d.desc}. Tips: ${d.tips}`));
+            const systemPrompt = `你是一位專業的巴爾幹半島導遊。使用繁體中文回答。你的回答應該簡潔、有趣且實用。請參考使用者的行程內容：${itineraryContext}。使用者問題：${userText}`;
+
+            // Call API
+            const aiResponse = await callGemini(systemPrompt);
+
+            // UI Update: AI Response
+            historyEl.removeChild(loadingBubble);
+            const aiBubble = document.createElement('div');
+            aiBubble.className = 'chat-bubble chat-ai markdown-body';
+            aiBubble.innerHTML = marked.parse(aiResponse);
+            historyEl.appendChild(aiBubble);
+            historyEl.scrollTop = historyEl.scrollHeight;
+
+            inputEl.disabled = false;
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50');
+            inputEl.focus();
+        }
+
+        async function recommendGift() {
+            const recipient = document.getElementById('gift-recipient').value;
+            const country = document.getElementById('gift-country').value;
+            const resultDiv = document.getElementById('gift-result');
+            const contentDiv = document.getElementById('gift-content');
+            const submitBtn = document.getElementById('gift-submit');
+
+            if (!recipient) {
+                alert("請輸入送禮對象！");
+                return;
+            }
+
+            // UI Loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = "✨ 正在為您挑選...";
+            resultDiv.classList.remove('hidden');
+            contentDiv.innerHTML = '<div class="text-center py-4 loading-dots text-purple-600">AI 正在分析最適合的禮物</div>';
+
+            // Construct Prompt
+            const souvenirsContext = JSON.stringify(souvenirsList);
+            const prompt = `你是一位巴爾幹半島紀念品專家。使用者想送禮給「${recipient}」，範圍是「${country}」。請從以下清單或你的知識庫中，推薦 2-3 個最適合的禮物，並用溫暖的語氣解釋原因。請使用 Markdown 格式條列。參考清單：${souvenirsContext}`;
+
+            // Call API
+            const aiResponse = await callGemini(prompt);
+
+            // Display Result
+            contentDiv.innerHTML = marked.parse(aiResponse);
+            submitBtn.disabled = false;
+            submitBtn.textContent = "✨ 生成推薦清單";
+        }
+
+        // --- DASHBOARD FUNCTIONS ---
+        function renderChecklist() {
+            const container = document.getElementById('checklist-container');
+            container.innerHTML = checklistItems.map((item) => `
+                <div class="flex items-center p-3 bg-gray-50 rounded-lg active:bg-orange-50 cursor-pointer transition select-none" onclick="toggleCheck(this)">
+                    <div class="w-6 h-6 border-2 border-gray-300 rounded-full mr-3 flex items-center justify-center text-white font-bold text-xs check-box transition-colors">✓</div>
+                    <span class="text-gray-700 text-sm font-medium">${item}</span>
+                </div>
+            `).join('');
+        }
+
+        function toggleCheck(el) {
+            const box = el.querySelector('.check-box');
+            if (box.classList.contains('bg-green-500')) {
+                box.classList.remove('bg-green-500', 'border-green-500');
+                box.classList.add('border-gray-300');
+                el.classList.remove('bg-green-50', 'border-green-100');
+            } else {
+                box.classList.add('bg-green-500', 'border-green-500');
+                box.classList.remove('border-gray-300');
+                el.classList.add('bg-green-50', 'border-green-100');
+            }
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const checked = document.querySelectorAll('.check-box.bg-green-500').length;
+            const total = checklistItems.length;
+            document.getElementById('progress-text').innerText = `${checked}/${total}`;
+        }
+
+        // --- ITINERARY FUNCTIONS ---
+        function renderTimeline() {
+            const container = document.getElementById('timeline-scroll');
+            container.innerHTML = itineraryData.map((day) => `
+                <div onclick="selectDay(${day.day})" id="day-card-${day.day}" class="flex-shrink-0 w-20 flex flex-col items-center justify-center py-2 px-1 rounded-xl transition-all cursor-pointer day-card border border-transparent">
+                    <span class="text-[10px] font-bold text-gray-400 mb-1">D${day.day}</span>
+                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-600 mb-1 date-circle">${day.date.split('/')[1]}</div>
+                </div>
+            `).join('');
+        }
+
+        function selectDay(dayNum) {
+            const data = itineraryData.find(d => d.day === dayNum);
+            
+            // Update Visuals
+            document.querySelectorAll('.day-card').forEach(el => {
+                el.classList.remove('active-day');
+                el.querySelector('.date-circle').classList.remove('bg-orange-500', 'text-white');
+                el.querySelector('.date-circle').classList.add('bg-gray-100', 'text-gray-600');
+            });
+            
+            const activeCard = document.getElementById(`day-card-${dayNum}`);
+            if(activeCard) {
+                activeCard.classList.add('active-day');
+                activeCard.querySelector('.date-circle').classList.remove('bg-gray-100', 'text-gray-600');
+                activeCard.querySelector('.date-circle').classList.add('bg-orange-500', 'text-white');
+                activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+
+            // Render Detail
+            const detailContainer = document.getElementById('day-detail');
+            
+            // Gift logic
+            let giftSection = '';
+            if (data.gift) {
+                giftSection = `
+                    <div class="mt-4 p-3 bg-pink-50 rounded-lg border border-pink-100">
+                        <h4 class="font-bold text-pink-700 mb-1 text-sm flex items-center"><span class="mr-1">🛍️</span> 購物推薦</h4>
+                        <p class="text-xs text-gray-700 leading-relaxed">${data.gift}</p>
+                    </div>
+                `;
+            }
+
+            detailContainer.innerHTML = `
+                <div class="relative h-32 bg-gradient-to-br from-orange-500 to-red-500 text-white p-5 overflow-hidden">
+                    <div class="absolute -right-4 -top-4 text-9xl opacity-10 font-bold">${data.day}</div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs bg-white/20 px-2 py-0.5 rounded backdrop-blur-sm">${data.date}</span>
+                            <div class="text-right">
+                                <span class="text-2xl font-bold">${data.tempH}°</span>
+                                <span class="text-sm opacity-80">/ ${data.tempL}°</span>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-bold leading-tight mt-1">${data.country}</h3>
+                        <p class="text-xs opacity-90 mt-1 truncate">${data.loc}</p>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-600 leading-relaxed">${data.desc}</p>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+                            <h4 class="font-bold text-blue-800 mb-1 text-sm flex items-center"><span class="mr-1">💡</span> 貼心提醒</h4>
+                            <p class="text-xs text-gray-700 leading-relaxed">${data.tips}</p>
+                        </div>
+                        ${giftSection}
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- SOUVENIRS FUNCTIONS ---
+        function renderCustomsFilters() {
+            const container = document.getElementById('customs-filters');
+            container.innerHTML = Object.keys(customsRules).map(key => `
+                <button onclick="checkCustoms('${key}')" class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-gray-600 active:bg-gray-100 text-xs font-medium transition shadow-sm">
+                    ${key}
+                </button>
+            `).join('');
+        }
+
+        function checkCustoms(key) {
+            const rule = customsRules[key];
+            const resultBox = document.getElementById('customs-result');
+            
+            let colorClass = "bg-gray-50 border-gray-200 text-gray-700";
+            if (rule.status === 'stop') colorClass = "bg-red-50 border-red-200 text-red-800";
+            if (rule.status === 'caution') colorClass = "bg-yellow-50 border-yellow-200 text-yellow-800";
+            if (rule.status === 'go') colorClass = "bg-green-50 border-green-200 text-green-800";
+
+            resultBox.className = `p-4 rounded-lg border text-center transition-all ${colorClass}`;
+            resultBox.innerHTML = `<span class="font-bold text-sm block">${rule.msg}</span>`;
+        }
+
+        function renderSouvenirs(list) {
+            const container = document.getElementById('souvenir-grid');
+            container.innerHTML = list.map(item => `
+                <div class="bg-white rounded-lg p-4 border border-gray-100 shadow-sm flex items-start souvenir-item active:scale-[0.99] transition-transform" data-country="${item.country}">
+                    <div class="w-1 h-12 bg-gradient-to-b from-purple-400 to-pink-500 rounded-full mr-3 flex-shrink-0"></div>
+                    <div class="flex-grow">
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-gray-800 text-sm">${item.name}</h3>
+                            <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">${item.country}</span>
+                        </div>
+                        <p class="text-xs text-gray-500 leading-tight mb-2">${item.desc}</p>
+                        <div class="flex gap-1 flex-wrap">
+                            ${item.tags.map(t => `<span class="text-[10px] text-gray-400">#${t}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterSouvenirs(country) {
+            document.querySelectorAll('#souvenirs button[id^="filter-"]').forEach(btn => {
+                if(btn.id === `filter-${country}`) {
+                     btn.classList.remove('bg-gray-100', 'text-gray-600');
+                     btn.classList.add('bg-purple-600', 'text-white', 'shadow-md');
+                } else {
+                     btn.classList.add('bg-gray-100', 'text-gray-600');
+                     btn.classList.remove('bg-purple-600', 'text-white', 'shadow-md');
+                }
+            });
+
+            const items = document.querySelectorAll('.souvenir-item');
+            items.forEach(item => {
+                if (country === 'all' || item.dataset.country.includes(country)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // --- CHARTS ---
+        let tempChartInstance = null;
+        let currencyChartInstance = null;
+
+        function initCharts() {
+            // Temperature
+            const ctxTemp = document.getElementById('tempChart');
+            if (ctxTemp) {
+                if (tempChartInstance) tempChartInstance.destroy();
+                const labels = itineraryData.map(d => `D${d.day}`);
+                const highs = itineraryData.map(d => d.tempH);
+                const lows = itineraryData.map(d => d.tempL);
+
+                tempChartInstance = new Chart(ctxTemp, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            { label: '高溫', data: highs, borderColor: '#DD6B20', backgroundColor: 'rgba(221, 107, 32, 0.1)', tension: 0.4, borderWidth: 2, pointRadius: 2 },
+                            { label: '低溫', data: lows, borderColor: '#3182CE', backgroundColor: 'rgba(49, 130, 206, 0.1)', tension: 0.4, borderWidth: 2, pointRadius: 2, fill: true }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'top', labels: { boxWidth: 10, font: { size: 10 } } } },
+                        scales: { y: { display: true, grid: { color: '#f5f5f5' } }, x: { display: false } }
+                    }
+                });
+            }
+
+            // Currency
+            const ctxCurr = document.getElementById('currencyChart');
+            if (ctxCurr) {
+                if (currencyChartInstance) currencyChartInstance.destroy();
+                currencyChartInstance = new Chart(ctxCurr, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['歐元', '列伊(羅)', '列弗(保)', '福林(匈)', '其他'],
+                        datasets: [{
+                            data: [3, 3, 2, 2, 5],
+                            backgroundColor: ['#3182CE', '#D69E2E', '#E53E3E', '#38A169', '#805AD5'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } } }
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 </html>
